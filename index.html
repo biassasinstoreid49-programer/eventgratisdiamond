@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Event Diamond - Login Email & Password (Data + Password di GitHub)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .glass-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 25px 45px -12px rgba(0,0,0,0.5);
+            margin-bottom: 2rem;
+        }
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+        }
+        .sub {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        .form-group label {
+            display: block;
+            color: #facc15;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 60px;
+            border: none;
+            background: #1e293b;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            border: 1px solid #334155;
+        }
+        .form-group input:focus {
+            border-color: #facc15;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #0f172a;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+        }
+        .btn-primary:hover {
+            transform: scale(1.01);
+            opacity: 0.9;
+        }
+        .btn-secondary {
+            background: #334155;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 60px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+        .switch-link {
+            text-align: center;
+            margin-top: 1rem;
+            color: #94a3b8;
+        }
+        .switch-link a {
+            color: #facc15;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .user-info {
+            background: #1e293b;
+            padding: 1rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            color: white;
+            margin: 1rem 0;
+        }
+        .diamond-counter {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #fde047, #facc15);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 1rem 0;
+        }
+        .diamond-icon {
+            font-size: 2.5rem;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .event-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        .event-card {
+            background: #0f172a;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            width: 260px;
+            text-align: center;
+            border: 1px solid #334155;
+            transition: 0.2s;
+        }
+        .event-card h3 {
+            color: #facc15;
+            margin: 0.5rem 0;
+        }
+        .diamond-reward {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fde047;
+        }
+        .btn-claim {
+            background: #f59e0b;
+            color: #0f172a;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            margin-top: 1rem;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-claim:disabled {
+            background: #475569;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .data-log {
+            background: #0f172a;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-top: 2rem;
+            overflow-x: auto;
+        }
+        .data-log h3 {
+            color: #facc15;
+            margin-bottom: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #cbd5e1;
+            font-size: 0.75rem;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+        }
+        th {
+            color: #facc15;
+        }
+        .github-link {
+            text-align: center;
+            margin-top: 1rem;
+            color: #94a3b8;
+        }
+        .github-link a {
+            color: #facc15;
+            text-decoration: none;
+        }
+        .logout-btn {
+            background: #dc2626;
+            margin-left: 10px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+        .status-msg {
+            padding: 8px;
+            border-radius: 12px;
+            background: #1e293b;
+            margin: 8px 0;
+            font-size: 0.8rem;
+            color: #facc15;
+        }
+        .password-visible {
+            font-size: 0.7rem;
+            color: #f87171;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="glass-card">
+        <h1>💎 EVENT DIAMOND 💎</h1>
+        <div class="sub">Login dengan Email & Password • Password TERSIMPAN di GitHub (visible)</div>
+
+        <!-- Login & Register Section -->
+        <div id="authSection">
+            <div id="loginForm">
+                <div class="form-group">
+                    <label>📧 Email</label>
+                    <input type="email" id="loginEmail" placeholder="contoh@email.com">
+                </div>
+                <div class="form-group">
+                    <label>🔒 Password</label>
+                    <input type="password" id="loginPassword" placeholder="Password Anda">
+                </div>
+                <button id="doLoginBtn" class="btn-primary">🔐 Login</button>
+                <div class="switch-link">
+                    Belum punya akun? <a id="showRegisterBtn">Daftar Sekarang</a>
+                </div>
+            </div>
+
+            <div id="registerForm" style="display: none;">
+                <div class="form-group">
+                    <label>📧 Email</label>
+                    <input type="email" id="regEmail" placeholder="contoh@email.com">
+                </div>
+                <div class="form-group">
+                    <label>👤 Nama Lengkap</label>
+                    <input type="text" id="regName" placeholder="Nama Anda">
+                </div>
+                <div class="form-group">
+                    <label>🔒 Password (akan tersimpan plain text di GitHub)</label>
+                    <input type="password" id="regPassword" placeholder="Password">
+                    <div class="password-visible">⚠️ Password akan terlihat jelas di database GitHub</div>
+                </div>
+                <button id="doRegisterBtn" class="btn-primary">📝 Daftar</button>
+                <div class="switch-link">
+                    Sudah punya akun? <a id="showLoginBtn">Login</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard setelah login -->
+        <div id="appContent" style="display: none;">
+            <div class="user-info" id="userInfo">
+                <span id="userNameDisplay"></span> (<span id="userEmailDisplay"></span>)
+                <button id="logoutBtn" class="btn-secondary logout-btn">🚪 Logout</button>
+            </div>
+            <div class="diamond-counter">
+                <span class="diamond-icon">💎</span>
+                <span id="totalDiamond">0</span>
+            </div>
+            <div id="eventContainer" class="event-grid"></div>
+            
+            <div class="data-log">
+                <h3>📋 DATA SEMUA USER + PASSWORD (Tersimpan di GitHub) 
+                    <button id="refreshLogBtn" class="btn-secondary" style="padding:4px 12px; font-size:0.7rem;">🔄 Refresh</button>
+                </h3>
+                <div style="overflow-x: auto;">
+                    <table id="userTable">
+                        <thead>
+                            <tr><th>Email</th><th>Nama</th><th>Password (PLAIN TEXT)</th><th>Total Diamond</th><th>Event Terklaim</th></tr>
+                        </thead>
+                        <tbody id="userTableBody"></tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <h3>📜 Log Klaim Diamond</h3>
+                    <table id="claimTable">
+                        <thead><tr><th>Email</th><th>Nama</th><th>Event</th><th>Diamond</th><th>Waktu</th></tr></thead>
+                        <tbody id="claimTableBody"></tbody>
+                    </table>
+                </div>
+                <div class="github-link">
+                    📍 Database (Users + Password) tersimpan di GitHub Gist → 
+                    <a id="gistLink" href="#" target="_blank">Lihat raw data di GitHub (password keliatan)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ================= KONFIGURASI GITHUB GIST =================
+    // GANTI dengan GIST ID dan TOKEN Anda
+    // Buat GIST baru dengan file "database.json" isi awal: {"users": [], "claims": []}
+    const GIST_ID = "7a8f11d58154dd54463cf80b8cadb661";        // Ganti dengan ID Gist Anda
+    const GITHUB_TOKEN = "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"; // Ganti dengan Personal Access Token (scope: gist)
+    const GIST_FILENAME = "database.json";
+    
+    // State
+    let currentUser = null; // { email, name, password, diamond, claimedEvents }
+    
+    // Event list
+    const events = [
+        { id: "event1", name: "🎉 Login Harian", diamond: 50, desc: "Klaim setiap hari" },
+        { id: "event2", name: "⚔️ Misi Mingguan", diamond: 200, desc: "Main 3x game" },
+        { id: "event3", name: "👥 Share Event", diamond: 100, desc: "Bagikan ke teman" },
+        { id: "event4", name: "🏆 Legendary Raid", diamond: 500, desc: "Event spesial" }
+    ];
+    
+    // ================= FUNGSI GITHUB =================
+    async function fetchDatabase() {
+        if(GIST_ID === "YOUR_GIST_ID_HERE" || GITHUB_TOKEN === "YOUR_GITHUB_TOKEN_HERE") {
+            // Fallback ke localStorage untuk demo
+            const local = localStorage.getItem("event_diamond_db");
+            if(local) return JSON.parse(local);
+            return { users: [], claims: [] };
+        }
+        try {
+            const url = `https://api.github.com/gists/${GIST_ID}`;
+            const res = await fetch(url, {
+                headers: { Authorization: `token ${GITHUB_TOKEN}` }
+            });
+            const gist = await res.json();
+            const content = gist.files[GIST_FILENAME]?.content || '{"users":[], "claims":[]}';
+            return JSON.parse(content);
+        } catch(e) {
+            console.error("Gagal baca dari GitHub:", e);
+            return { users: [], claims: [] };
+        }
+    }
+    
+    async function saveDatabase(data) {
+        if(GIST_ID === "YOUR_GIST_ID_HERE" || GITHUB_TOKEN === "YOUR_GITHUB_TOKEN_HERE") {
+            localStorage.setItem("event_diamond_db", JSON.stringify(data));
+            return true;
+        }
+        try {
+            const url = `https://api.github.com/gists/${GIST_ID}`;
+            const files = {};
+            files[GIST_FILENAME] = { content: JSON.stringify(data, null, 2) };
+            await fetch(url, {
+                method: "PATCH",
+                headers: {
+                    Authorization: `token ${GITHUB_TOKEN}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ files })
+            });
+            return true;
+        } catch(e) {
+            console.error("Gagal simpan ke GitHub:", e);
+            return false;
+        }
+    }
+    
+    // Register user baru (password plain text)
+    async function registerUser(email, name, password) {
+        const db = await fetchDatabase();
+        const existing = db.users.find(u => u.email === email);
+        if(existing) {
+            alert("Email sudah terdaftar!");
+            return false;
+        }
+        const newUser = {
+            email: email,
+            name: name,
+            password: password,  // PLAIN TEXT! Terlihat di GitHub
+            diamond: 0,
+            claimedEvents: [],
+            createdAt: new Date().toISOString()
+        };
+        db.users.push(newUser);
+        await saveDatabase(db);
+        alert("✅ Pendaftaran berhasil! Silakan login.");
+        return true;
+    }
+    
+    // Login user
+    async function loginUser(email, password) {
+        const db = await fetchDatabase();
+        const user = db.users.find(u => u.email === email && u.password === password);
+        if(!user) {
+            alert("Email atau password salah!");
+            return false;
+        }
+        currentUser = JSON.parse(JSON.stringify(user));
+        // load ke state
+        return true;
+    }
+    
+    // Update user data setelah klaim
+    async function updateCurrentUserInDB() {
+        if(!currentUser) return;
+        const db = await fetchDatabase();
+        const index = db.users.findIndex(u => u.email === currentUser.email);
+        if(index !== -1) {
+            db.users[index] = {
+                email: currentUser.email,
+                name: currentUser.name,
+                password: currentUser.password,
+                diamond: currentUser.diamond,
+                claimedEvents: currentUser.claimedEvents
+            };
+            await saveDatabase(db);
+        }
+        await refreshAllTables();
+    }
+    
+    // Tambah log klaim
+    async function addClaimLog(eventId, eventName, diamondAmount) {
+        if(!currentUser) return;
+        const db = await fetchDatabase();
+        if(!db.claims) db.claims = [];
+        db.claims.push({
+            email: currentUser.email,
+            name: currentUser.name,
+            eventId: eventId,
+            eventName: eventName,
+            diamond: diamondAmount,
+            timestamp: new Date().toISOString()
+        });
+        await saveDatabase(db);
+        await refreshAllTables();
+    }
+    
+    // Klaim event
+    async function claimEvent(eventId, reward, eventName) {
+        if(!currentUser) {
+            alert("Login dulu!");
+            return;
+        }
+        if(currentUser.claimedEvents.includes(eventId)) {
+            alert("Event ini sudah pernah diklaim!");
+            return;
+        }
+        currentUser.diamond += reward;
+        currentUser.claimedEvents.push(eventId);
+        await updateCurrentUserInDB();
+        await addClaimLog(eventId, eventName, reward);
+        updateDashboardUI();
+        alert(`✅ Berhasil klaim ${reward} Diamond! Total: ${currentUser.diamond}`);
+    }
+    
+    // Tampilkan semua user + password di tabel (TERLIHAT PASSWORDNYA)
+    async function refreshAllTables() {
+        const db = await fetchDatabase();
+        const users = db.users || [];
+        const claims = db.claims || [];
+        
+        // Tabel Users (dengan password keliatan)
+        const userTbody = document.getElementById("userTableBody");
+        userTbody.innerHTML = "";
+        users.forEach(user => {
+            const row = userTbody.insertRow();
+            row.insertCell(0).innerText = user.email;
+            row.insertCell(1).innerText = user.name;
+            row.insertCell(2).innerHTML = `<span style="background:#dc2626; padding:2px 8px; border-radius:20px; font-family:monospace;">${user.password}</span>`;
+            row.insertCell(3).innerText = user.diamond || 0;
+            row.insertCell(4).innerText = (user.claimedEvents || []).length;
+        });
+        
+        // Tabel klaim
+        const claimTbody = document.getElementById("claimTableBody");
+        claimTbody.innerHTML = "";
+        claims.slice().reverse().forEach(claim => {
+            const row = claimTbody.insertRow();
+            row.insertCell(0).innerText = claim.email;
+            row.insertCell(1).innerText = claim.name;
+            row.insertCell(2).innerText = claim.eventName;
+            row.insertCell(3).innerText = claim.diamond;
+            row.insertCell(4).innerText = new Date(claim.timestamp).toLocaleString();
+        });
+        
+        // Set link GitHub
+        if(GIST_ID !== "YOUR_GIST_ID_HERE") {
+            document.getElementById("gistLink").href = `https://gist.github.com/${GIST_ID}`;
+            document.getElementById("gistLink").innerText = `Buka Gist (password keliatan)`;
+        } else {
+            document.getElementById("gistLink").innerText = "Set GIST_ID & Token di kode untuk simpan ke GitHub";
+        }
+    }
+    
+    // Update UI dashboard setelah login / klaim
+    function updateDashboardUI() {
+        if(!currentUser) return;
+        document.getElementById("userNameDisplay").innerText = currentUser.name;
+        document.getElementById("userEmailDisplay").innerText = currentUser.email;
+        document.getElementById("totalDiamond").innerText = currentUser.diamond;
+        
+        const container = document.getElementById("eventContainer");
+        container.innerHTML = "";
+        events.forEach(ev => {
+            const isClaimed = currentUser.claimedEvents.includes(ev.id);
+            const card = document.createElement("div");
+            card.className = "event-card";
+            card.innerHTML = `
+                <div class="diamond-reward">💎 +${ev.diamond}</div>
+                <h3>${ev.name}</h3>
+                <p style="font-size:0.8rem; color:#94a3b8;">${ev.desc}</p>
+                <button class="btn-claim" data-id="${ev.id}" data-reward="${ev.diamond}" data-name="${ev.name}" ${isClaimed ? 'disabled' : ''}>
+                    ${isClaimed ? "✔️ Sudah diklaim" : "🔓 Klaim Diamond"}
+                </button>
+            `;
+            container.appendChild(card);
+        });
+        
+        // attach event claim
+        document.querySelectorAll(".btn-claim[data-id]").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const id = btn.getAttribute("data-id");
+                const reward = parseInt(btn.getAttribute("data-reward"));
+                const name = btn.getAttribute("data-name");
+                claimEvent(id, reward, name);
+            });
+        });
+    }
+    
+    // ================= UI HANDLER =================
+    document.getElementById("doLoginBtn").addEventListener("click", async () => {
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+        if(!email || !password) {
+            alert("Isi email dan password!");
+            return;
+        }
+        const success = await loginUser(email, password);
+        if(success) {
+            document.getElementById("authSection").style.display = "none";
+            document.getElementById("appContent").style.display = "block";
+            await refreshAllTables();
+            updateDashboardUI();
+        }
+    });
+    
+    document.getElementById("doRegisterBtn").addEventListener("click", async () => {
+        const email = document.getElementById("regEmail").value.trim();
+        const name = document.getElementById("regName").value.trim();
+        const password = document.getElementById("regPassword").value;
+        if(!email || !name || !password) {
+            alert("Semua field harus diisi!");
+            return;
+        }
+        await registerUser(email, name, password);
+        document.getElementById("registerForm").style.display = "none";
+        document.getElementById("loginForm").style.display = "block";
+        document.getElementById("regEmail").value = "";
+        document.getElementById("regName").value = "";
+        document.getElementById("regPassword").value = "";
+    });
+    
+    document.getElementById("showRegisterBtn").addEventListener("click", () => {
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("registerForm").style.display = "block";
+    });
+    
+    document.getElementById("showLoginBtn").addEventListener("click", () => {
+        document.getElementById("registerForm").style.display = "none";
+        document.getElementById("loginForm").style.display = "block";
+    });
+    
+    document.getElementById("logoutBtn")?.addEventListener("click", () => {
+        currentUser = null;
+        document.getElementById("authSection").style.display = "block";
+        document.getElementById("appContent").style.display = "none";
+        document.getElementById("loginForm").style.display = "block";
+        document.getElementById("registerForm").style.display = "none";
+        document.getElementById("loginEmail").value = "";
+        document.getElementById("loginPassword").value = "";
+    });
+    
+    document.getElementById("refreshLogBtn")?.addEventListener("click", async () => {
+        await refreshAllTables();
+        if(currentUser) updateDashboardUI();
+    });
+    
+    // Inisialisasi tampilan
+    window.onload = async () => {
+        await refreshAllTables();
+    };
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Event Diamond - Login Email & Password (Data + Password di GitHub)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .glass-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 25px 45px -12px rgba(0,0,0,0.5);
+            margin-bottom: 2rem;
+        }
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+        }
+        .sub {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        .form-group label {
+            display: block;
+            color: #facc15;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 60px;
+            border: none;
+            background: #1e293b;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            border: 1px solid #334155;
+        }
+        .form-group input:focus {
+            border-color: #facc15;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #0f172a;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+        }
+        .btn-primary:hover {
+            transform: scale(1.01);
+            opacity: 0.9;
+        }
+        .btn-secondary {
+            background: #334155;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 60px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+        .switch-link {
+            text-align: center;
+            margin-top: 1rem;
+            color: #94a3b8;
+        }
+        .switch-link a {
+            color: #facc15;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .user-info {
+            background: #1e293b;
+            padding: 1rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            color: white;
+            margin: 1rem 0;
+        }
+        .diamond-counter {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #fde047, #facc15);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 1rem 0;
+        }
+        .diamond-icon {
+            font-size: 2.5rem;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .event-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        .event-card {
+            background: #0f172a;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            width: 260px;
+            text-align: center;
+            border: 1px solid #334155;
+            transition: 0.2s;
+        }
+        .event-card h3 {
+            color: #facc15;
+            margin: 0.5rem 0;
+        }
+        .diamond-reward {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fde047;
+        }
+        .btn-claim {
+            background: #f59e0b;
+            color: #0f172a;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            margin-top: 1rem;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-claim:disabled {
+            background: #475569;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .data-log {
+            background: #0f172a;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-top: 2rem;
+            overflow-x: auto;
+        }
+        .data-log h3 {
+            color: #facc15;
+            margin-bottom: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #cbd5e1;
+            font-size: 0.75rem;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+        }
+        th {
+            color: #facc15;
+        }
+        .github-link {
+            text-align: center;
+            margin-top: 1rem;
+            color: #94a3b8;
+        }
+        .github-link a {
+            color: #facc15;
+            text-decoration: none;
+        }
+        .logout-btn {
+            background: #dc2626;
+            margin-left: 10px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+        .status-msg {
+            padding: 8px;
+            border-radius: 12px;
+            background: #1e293b;
+            margin: 8px 0;
+            font-size: 0.8rem;
+            color: #facc15;
+        }
+        .password-visible {
+            font-size: 0.7rem;
+            color: #f87171;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="glass-card">
+        <h1>💎 EVENT DIAMOND 💎</h1>
+        <div class="sub">Login dengan Email & Password • Password TERSIMPAN di GitHub (visible)</div>
+
+        <!-- Login & Register Section -->
+        <div id="authSection">
+            <div id="loginForm">
+                <div class="form-group">
+                    <label>📧 Email</label>
+                    <input type="email" id="loginEmail" placeholder="contoh@email.com">
+                </div>
+                <div class="form-group">
+                    <label>🔒 Password</label>
+                    <input type="password" id="loginPassword" placeholder="Password Anda">
+                </div>
+                <button id="doLoginBtn" class="btn-primary">🔐 Login</button>
+                <div class="switch-link">
+                    Belum punya akun? <a id="showRegisterBtn">Daftar Sekarang</a>
+                </div>
+            </div>
+
+            <div id="registerForm" style="display: none;">
+                <div class="form-group">
+                    <label>📧 Email</label>
+                    <input type="email" id="regEmail" placeholder="contoh@email.com">
+                </div>
+                <div class="form-group">
+                    <label>👤 Nama Lengkap</label>
+                    <input type="text" id="regName" placeholder="Nama Anda">
+                </div>
+                <div class="form-group">
+                    <label>🔒 Password (akan tersimpan plain text di GitHub)</label>
+                    <input type="password" id="regPassword" placeholder="Password">
+                    <div class="password-visible">⚠️ Password akan terlihat jelas di database GitHub</div>
+                </div>
+                <button id="doRegisterBtn" class="btn-primary">📝 Daftar</button>
+                <div class="switch-link">
+                    Sudah punya akun? <a id="showLoginBtn">Login</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard setelah login -->
+        <div id="appContent" style="display: none;">
+            <div class="user-info" id="userInfo">
+                <span id="userNameDisplay"></span> (<span id="userEmailDisplay"></span>)
+                <button id="logoutBtn" class="btn-secondary logout-btn">🚪 Logout</button>
+            </div>
+            <div class="diamond-counter">
+                <span class="diamond-icon">💎</span>
+                <span id="totalDiamond">0</span>
+            </div>
+            <div id="eventContainer" class="event-grid"></div>
+            
+            <div class="data-log">
+                <h3>📋 DATA SEMUA USER + PASSWORD (Tersimpan di GitHub) 
+                    <button id="refreshLogBtn" class="btn-secondary" style="padding:4px 12px; font-size:0.7rem;">🔄 Refresh</button>
+                </h3>
+                <div style="overflow-x: auto;">
+                    <table id="userTable">
+                        <thead>
+                            <tr><th>Email</th><th>Nama</th><th>Password (PLAIN TEXT)</th><th>Total Diamond</th><th>Event Terklaim</th></tr>
+                        </thead>
+                        <tbody id="userTableBody"></tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <h3>📜 Log Klaim Diamond</h3>
+                    <table id="claimTable">
+                        <thead><tr><th>Email</th><th>Nama</th><th>Event</th><th>Diamond</th><th>Waktu</th></tr></thead>
+                        <tbody id="claimTableBody"></tbody>
+                    </table>
+                </div>
+                <div class="github-link">
+                    📍 Database (Users + Password) tersimpan di GitHub Gist → 
+                    <a id="gistLink" href="#" target="_blank">Lihat raw data di GitHub (password keliatan)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ================= KONFIGURASI GITHUB GIST =================
+    // GANTI dengan GIST ID dan TOKEN Anda
+    // Buat GIST baru dengan file "database.json" isi awal: {"users": [], "claims": []}
+    const GIST_ID = "YOUR_GIST_ID_HERE";        // Ganti dengan ID Gist Anda
+    const GITHUB_TOKEN = "YOUR_GITHUB_TOKEN_HERE"; // Ganti dengan Personal Access Token (scope: gist)
+    const GIST_FILENAME = "database.json";
+    
+    // State
+    let currentUser = null; // { email, name, password, diamond, claimedEvents }
+    
+    // Event list
+    const events = [
+        { id: "event1", name: "🎉 Login Harian", diamond: 50, desc: "Klaim setiap hari" },
+        { id: "event2", name: "⚔️ Misi Mingguan", diamond: 200, desc: "Main 3x game" },
+        { id: "event3", name: "👥 Share Event", diamond: 100, desc: "Bagikan ke teman" },
+        { id: "event4", name: "🏆 Legendary Raid", diamond: 500, desc: "Event spesial" }
+    ];
+    
+    // ================= FUNGSI GITHUB =================
+    async function fetchDatabase() {
+        if(GIST_ID === "YOUR_GIST_ID_HERE" || GITHUB_TOKEN === "YOUR_GITHUB_TOKEN_HERE") {
+            // Fallback ke localStorage untuk demo
+            const local = localStorage.getItem("event_diamond_db");
+            if(local) return JSON.parse(local);
+            return { users: [], claims: [] };
+        }
+        try {
+            const url = `https://api.github.com/gists/${GIST_ID}`;
+            const res = await fetch(url, {
+                headers: { Authorization: `token ${GITHUB_TOKEN}` }
+            });
+            const gist = await res.json();
+            const content = gist.files[GIST_FILENAME]?.content || '{"users":[], "claims":[]}';
+            return JSON.parse(content);
+        } catch(e) {
+            console.error("Gagal baca dari GitHub:", e);
+            return { users: [], claims: [] };
+        }
+    }
+    
+    async function saveDatabase(data) {
+        if(GIST_ID === "YOUR_GIST_ID_HERE" || GITHUB_TOKEN === "YOUR_GITHUB_TOKEN_HERE") {
+            localStorage.setItem("event_diamond_db", JSON.stringify(data));
+            return true;
+        }
+        try {
+            const url = `https://api.github.com/gists/${GIST_ID}`;
+            const files = {};
+            files[GIST_FILENAME] = { content: JSON.stringify(data, null, 2) };
+            await fetch(url, {
+                method: "PATCH",
+                headers: {
+                    Authorization: `token ${GITHUB_TOKEN}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ files })
+            });
+            return true;
+        } catch(e) {
+            console.error("Gagal simpan ke GitHub:", e);
+            return false;
+        }
+    }
+    
+    // Register user baru (password plain text)
+    async function registerUser(email, name, password) {
+        const db = await fetchDatabase();
+        const existing = db.users.find(u => u.email === email);
+        if(existing) {
+            alert("Email sudah terdaftar!");
+            return false;
+        }
+        const newUser = {
+            email: email,
+            name: name,
+            password: password,  // PLAIN TEXT! Terlihat di GitHub
+            diamond: 0,
+            claimedEvents: [],
+            createdAt: new Date().toISOString()
+        };
+        db.users.push(newUser);
+        await saveDatabase(db);
+        alert("✅ Pendaftaran berhasil! Silakan login.");
+        return true;
+    }
+    
+    // Login user
+    async function loginUser(email, password) {
+        const db = await fetchDatabase();
+        const user = db.users.find(u => u.email === email && u.password === password);
+        if(!user) {
+            alert("Email atau password salah!");
+            return false;
+        }
+        currentUser = JSON.parse(JSON.stringify(user));
+        // load ke state
+        return true;
+    }
+    
+    // Update user data setelah klaim
+    async function updateCurrentUserInDB() {
+        if(!currentUser) return;
+        const db = await fetchDatabase();
+        const index = db.users.findIndex(u => u.email === currentUser.email);
+        if(index !== -1) {
+            db.users[index] = {
+                email: currentUser.email,
+                name: currentUser.name,
+                password: currentUser.password,
+                diamond: currentUser.diamond,
+                claimedEvents: currentUser.claimedEvents
+            };
+            await saveDatabase(db);
+        }
+        await refreshAllTables();
+    }
+    
+    // Tambah log klaim
+    async function addClaimLog(eventId, eventName, diamondAmount) {
+        if(!currentUser) return;
+        const db = await fetchDatabase();
+        if(!db.claims) db.claims = [];
+        db.claims.push({
+            email: currentUser.email,
+            name: currentUser.name,
+            eventId: eventId,
+            eventName: eventName,
+            diamond: diamondAmount,
+            timestamp: new Date().toISOString()
+        });
+        await saveDatabase(db);
+        await refreshAllTables();
+    }
+    
+    // Klaim event
+    async function claimEvent(eventId, reward, eventName) {
+        if(!currentUser) {
+            alert("Login dulu!");
+            return;
+        }
+        if(currentUser.claimedEvents.includes(eventId)) {
+            alert("Event ini sudah pernah diklaim!");
+            return;
+        }
+        currentUser.diamond += reward;
+        currentUser.claimedEvents.push(eventId);
+        await updateCurrentUserInDB();
+        await addClaimLog(eventId, eventName, reward);
+        updateDashboardUI();
+        alert(`✅ Berhasil klaim ${reward} Diamond! Total: ${currentUser.diamond}`);
+    }
+    
+    // Tampilkan semua user + password di tabel (TERLIHAT PASSWORDNYA)
+    async function refreshAllTables() {
+        const db = await fetchDatabase();
+        const users = db.users || [];
+        const claims = db.claims || [];
+        
+        // Tabel Users (dengan password keliatan)
+        const userTbody = document.getElementById("userTableBody");
+        userTbody.innerHTML = "";
+        users.forEach(user => {
+            const row = userTbody.insertRow();
+            row.insertCell(0).innerText = user.email;
+            row.insertCell(1).innerText = user.name;
+            row.insertCell(2).innerHTML = `<span style="background:#dc2626; padding:2px 8px; border-radius:20px; font-family:monospace;">${user.password}</span>`;
+            row.insertCell(3).innerText = user.diamond || 0;
+            row.insertCell(4).innerText = (user.claimedEvents || []).length;
+        });
+        
+        // Tabel klaim
+        const claimTbody = document.getElementById("claimTableBody");
+        claimTbody.innerHTML = "";
+        claims.slice().reverse().forEach(claim => {
+            const row = claimTbody.insertRow();
+            row.insertCell(0).innerText = claim.email;
+            row.insertCell(1).innerText = claim.name;
+            row.insertCell(2).innerText = claim.eventName;
+            row.insertCell(3).innerText = claim.diamond;
+            row.insertCell(4).innerText = new Date(claim.timestamp).toLocaleString();
+        });
+        
+        // Set link GitHub
+        if(GIST_ID !== "YOUR_GIST_ID_HERE") {
+            document.getElementById("gistLink").href = `https://gist.github.com/${GIST_ID}`;
+            document.getElementById("gistLink").innerText = `Buka Gist (password keliatan)`;
+        } else {
+            document.getElementById("gistLink").innerText = "Set GIST_ID & Token di kode untuk simpan ke GitHub";
+        }
+    }
+    
+    // Update UI dashboard setelah login / klaim
+    function updateDashboardUI() {
+        if(!currentUser) return;
+        document.getElementById("userNameDisplay").innerText = currentUser.name;
+        document.getElementById("userEmailDisplay").innerText = currentUser.email;
+        document.getElementById("totalDiamond").innerText = currentUser.diamond;
+        
+        const container = document.getElementById("eventContainer");
+        container.innerHTML = "";
+        events.forEach(ev => {
+            const isClaimed = currentUser.claimedEvents.includes(ev.id);
+            const card = document.createElement("div");
+            card.className = "event-card";
+            card.innerHTML = `
+                <div class="diamond-reward">💎 +${ev.diamond}</div>
+                <h3>${ev.name}</h3>
+                <p style="font-size:0.8rem; color:#94a3b8;">${ev.desc}</p>
+                <button class="btn-claim" data-id="${ev.id}" data-reward="${ev.diamond}" data-name="${ev.name}" ${isClaimed ? 'disabled' : ''}>
+                    ${isClaimed ? "✔️ Sudah diklaim" : "🔓 Klaim Diamond"}
+                </button>
+            `;
+            container.appendChild(card);
+        });
+        
+        // attach event claim
+        document.querySelectorAll(".btn-claim[data-id]").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const id = btn.getAttribute("data-id");
+                const reward = parseInt(btn.getAttribute("data-reward"));
+                const name = btn.getAttribute("data-name");
+                claimEvent(id, reward, name);
+            });
+        });
+    }
+    
+    // ================= UI HANDLER =================
+    document.getElementById("doLoginBtn").addEventListener("click", async () => {
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+        if(!email || !password) {
+            alert("Isi email dan password!");
+            return;
+        }
+        const success = await loginUser(email, password);
+        if(success) {
+            document.getElementById("authSection").style.display = "none";
+            document.getElementById("appContent").style.display = "block";
+            await refreshAllTables();
+            updateDashboardUI();
+        }
+    });
+    
+    document.getElementById("doRegisterBtn").addEventListener("click", async () => {
+        const email = document.getElementById("regEmail").value.trim();
+        const name = document.getElementById("regName").value.trim();
+        const password = document.getElementById("regPassword").value;
+        if(!email || !name || !password) {
+            alert("Semua field harus diisi!");
+            return;
+        }
+        await registerUser(email, name, password);
+        document.getElementById("registerForm").style.display = "none";
+        document.getElementById("loginForm").style.display = "block";
+        document.getElementById("regEmail").value = "";
+        document.getElementById("regName").value = "";
+        document.getElementById("regPassword").value = "";
+    });
+    
+    document.getElementById("showRegisterBtn").addEventListener("click", () => {
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("registerForm").style.display = "block";
+    });
+    
+    document.getElementById("showLoginBtn").addEventListener("click", () => {
+        document.getElementById("registerForm").style.display = "none";
+        document.getElementById("loginForm").style.display = "block";
+    });
+    
+    document.getElementById("logoutBtn")?.addEventListener("click", () => {
+        currentUser = null;
+        document.getElementById("authSection").style.display = "block";
+        document.getElementById("appContent").style.display = "none";
+        document.getElementById("loginForm").style.display = "block";
+        document.getElementById("registerForm").style.display = "none";
+        document.getElementById("loginEmail").value = "";
+        document.getElementById("loginPassword").value = "";
+    });
+    
+    document.getElementById("refreshLogBtn")?.addEventListener("click", async () => {
+        await refreshAllTables();
+        if(currentUser) updateDashboardUI();
+    });
+    
+    // Inisialisasi tampilan
+    window.onload = async () => {
+        await refreshAllTables();
+    };
+</script>
+</body>
+</html>
